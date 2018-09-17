@@ -27,6 +27,5 @@ module.exports = {
     },
     plugins: [
         new VueLoaderPlugin()
-        //pruebas git
     ]
 }
