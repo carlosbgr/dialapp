@@ -17,7 +17,7 @@
     "express-toastr": "^2.0.2",
     "firebase": "^5.5.0",
     "moment": "^2.22.2",
-    "mongoose": "^5.2.14",
+    "mongoose": "^5.2.15",
     "mongoose-schema-formatdate": "^1.0.0",
     "morgan": "^1.9.1",
     "nodemon": "^1.18.4",
