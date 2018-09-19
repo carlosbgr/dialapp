@@ -12,10 +12,14 @@ const Paciente = new Schema({
   direccion: { type: String, uppercase: true },
   localidad: { type: String, uppercase: true },
   cp: { type: String, uppercase: true },
-  fNacimiento: {type: Date, format: 'DD-MM-YYYY'},
+  fNacimiento: {type: Date, format: 'DD-MM-YYYY' },
   fAlta: { type: Date, default: Date.now() },
   fBaja: Date,
-  activo: { type: Boolean, default: true }
-})
+  motivoBaja: String,
+  sexo: { type: String, enum: ['H','M'] },
+  idMonitor: Number,
+  activo: { type: Boolean, default: true },
+},
+{ versionKey: false })
 
 module.exports = mongoose.model('Paciente', Paciente)

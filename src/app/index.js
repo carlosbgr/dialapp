@@ -5,6 +5,8 @@ import VueFire from 'vuefire'
 import App from '../app/components/App.vue'
 import { Pagination } from 'bootstrap-vue/es/components'
 
+Vue.use(Pagination);
+
 Vue.config.productionTip = false
 Vue.use(VueFire)
 Vue.use(Pagination)

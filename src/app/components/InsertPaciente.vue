@@ -9,7 +9,7 @@
           <div class="card-body">
             <form @submit.prevent="sendPaciente">
               <div class="form-group">
-                <input type="number" class="form-control" v-model="paciente.sip" placeholder="SIP">
+                <input type="text" class="form-control" v-model="paciente.sip" placeholder="SIP">
               </div>
               <div class="form-group">
                 <input type="email" class="form-control" v-model="paciente.email" placeholder="@Correo">
@@ -36,10 +36,20 @@
                 <input type="text" class="form-control" v-model="paciente.localidad" placeholder="Localidad">
               </div>
               <div class="form-group">
-                <input type="number" class="form-control" v-model="paciente.cp" placeholder="Codigo Postal">
+                <input type="text" class="form-control" v-model="paciente.cp" placeholder="Codigo Postal">
               </div>
               <div class="form-group">
                 <input type="date" class="form-control" v-model="paciente.fNacimiento" placeholder="Fecha Nacimiento">
+              </div>
+              <div class="form-group">
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" class="custom-control-input" v-model="paciente.sexo" id="sexoH" value="H" name="groupSexoRadio">
+                  <label class="custom-control-label" for="sexoH">Hombre</label>
+                </div>
+                <div class="custom-control custom-radio custom-control-inline">
+                  <input type="radio" class="custom-control-input" v-model="paciente.sexo" id="sexoM" value="M" name="groupSexoRadio">
+                  <label class="custom-control-label" for="sexoM">Mujer</label>
+                </div>
               </div>
               <template v-if="edit === false">
                 <button class="btn btn-block btn-primary">Añadir</button>
@@ -57,6 +67,7 @@
             <h3>Pacientes</h3>
           </div>
           <div class="card-body">
+          <b-pagination align="center" :total-rows="this.pacientes.length" v-model="paginaActual" :per-page="pacientesPagina"></b-pagination>
           <table class="table table-bordered table-hover small">
             <thead>
                 <tr>
@@ -65,31 +76,37 @@
                     <th scope="col">Apellidos</th>
                     <th scope="col">Telefonos</th>
                     <th scope="col">Direccion</th>
-                    <th scope="col">F. Nacimiento</th>
+                    <th scope="col">F.Nacimiento</th>
                     <th scope="col">Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(p, index) in pacientes" :key="index">
+                <tr v-for="(p, index) in paginador(pacientes)" :key="index">
                     <td>{{ p.sip }}</td>
                     <td>{{ p.nombre }}</td>
-                    <td>{{ p.pApellido + ' ' +p.sApellido }}</td>
-                    <td>{{ p.telefono + ' - ' +p.otroTelefono }}</td>
-                    <td>{{ p.direccion + ', ' + p.cp + '(' + p.localidad + ')'}}</td>
+
+                    <td v-if="p.sApellido === undefined">{{ p.pApellido }}</td>
+                    <td v-else>{{ p.pApellido + ' ' + p.sApellido }}</td>
+
+                    <td v-if="p.otroTelefono === undefined">{{ p.telefono }}</td>
+                    <td v-else>{{ p.telefono + ' - ' +p.otroTelefono }}</td>
+
+                    <td>{{ p.direccion + ', ' + p.cp + ' (' + p.localidad + ')'}}</td>
                     <td>{{ p.fNacimiento }}</td>
                     <td>
-                      <template v-if="p.activo === true">
-                        <button @click="unsubscribePaciente(p._id)" class="btn btn-danger btn-block">D</button>
-                      </template>
-                      <template v-else>
-                        <button @click="unsubscribePaciente(p._id)" class="btn btn-success btn-block">A</button>
-                      </template>
-                      <button @click="editPaciente(p._id)" class="btn btn-secondary btn-block">E</button>
+                      <div class="btn-group">
+                        <template v-if="p.activo === true">
+                          <button @click="unsubscribePaciente(p._id)" class="btn btn-danger">D</button>
+                        </template>
+                        <template v-else>
+                          <button @click="unsubscribePaciente(p._id)" class="btn btn-success">A</button>
+                        </template>
+                        <button @click="editPaciente(p._id)" class="btn btn-secondary">E</button>
+                      </div>
                     </td>
                 </tr>
             </tbody>
           </table>
-                    <b-pagination align="center" :total-rows="this.pacientes.length" v-model="currentPage" :per-page="limit"></b-pagination>
          </div>
         </div>
       </div>
@@ -103,8 +120,10 @@ import moment from 'moment'
 import toastr from 'toastr'
 toastr.options.timeOut = 2000
 
+import bPagination from "bootstrap-vue/es/components/pagination/pagination";
+
 class Paciente {
-  constructor(sip,email,nombre,pApellido,sApellido,telefono,otroTelefono,direccion,localidad,cp,fNacimiento) {
+  constructor(sip,email,nombre,pApellido,sApellido,telefono,otroTelefono,direccion,localidad,cp,fNacimiento,sexo) {
     this.sip = sip
     this.email = email
     this.nombre = nombre
@@ -116,10 +135,14 @@ class Paciente {
     this.localidad = localidad
     this.cp = cp
     this.fNacimiento = fNacimiento
+    this.sexo
   }
 }
 
 export default {
+  components: {
+    bPagination
+  },
   data() {
     return {
       paciente: new Paciente(),
@@ -127,8 +150,8 @@ export default {
       datatemp: [],
       edit: false,
       pacienteToEdit: '',
-      currentPage: 1,
-      limit: 2
+      paginaActual: 1,
+      pacientesPagina: 8
     };
   },
   created() {
@@ -148,6 +171,9 @@ export default {
         });
     },
     sendPaciente(){
+      console.log(this.paciente.sexo)
+
+
       if(this.edit === false) {
         fetch("/api/pacientes", {
         method: "POST",
@@ -224,13 +250,10 @@ export default {
           this.edit = true
         })
     },
-    paginador(pacientes) {
-      const indiceInicio = (this.currentpage - 1) * this.limit;
-      const indiceFinal =
-        indiceInicio + this.currentPage > pacientes.length
-          ? pacientes.length
-          : indiceInicio  + this.currentPage;
-      return pacientes.slice(indiceInicio , indiceFinal );
+    paginador(p) {
+      const indiceInicio = (this.paginaActual - 1) * this.pacientesPagina
+      const indiceFinal = indiceInicio + this.paginaActual > p.length ? p.length : indiceInicio  + this.paginaActual
+      return p.slice(indiceInicio , (indiceInicio + this.pacientesPagina) )
     }
   }
 }
@@ -239,7 +262,8 @@ export default {
 <style lang="css" scoped>
 
 .container {
-  font: 50%;
+  font: 40%;
+  margin-right: 1%;
 }
 
 </style>
