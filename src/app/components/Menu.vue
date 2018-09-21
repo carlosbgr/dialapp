@@ -43,10 +43,10 @@
                     </div>
                     <div class="card-body">
                         <div class="btn-block">
-                            <button class="btn btn-default btn-lg btn-block" @click="btnRedirect('mantenimiento/pacientes')">Pacientes</button>
-                            <button class="btn btn-default btn-lg btn-block" @click="btnRedirect('mantenimiento/monitores')">Monitores</button>
-                            <button class="btn btn-default btn-lg btn-block" @click="btnRedirect('dializadores')">Dializadores</button>
-                            <button class="btn btn-default btn-lg btn-block" @click="btnRedirect('mantenimiento/facultativos')">Facultativos</button>
+                            <button class="btn btn-light btn-block" @click="btnRedirect('mantenimiento/pacientes')">Pacientes</button>
+                            <button class="btn btn-light btn-block" @click="btnRedirect('mantenimiento/monitores')">Monitores</button>
+                            <button class="btn btn-light btn-block" @click="btnRedirect('dializadores')">Dializadores</button>
+                            <button class="btn btn-light btn-block" @click="btnRedirect('mantenimiento/facultativos')">Facultativos</button>
                         </div>
                     </div>
                 </div>
