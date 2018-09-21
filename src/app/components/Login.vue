@@ -34,6 +34,7 @@
 
 <script>
 import Firebase from 'firebase'
+import App from './App.vue'
 
 export default {
   name: 'signIn',
@@ -48,11 +49,22 @@ export default {
       Firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(
         (user) => {
           this.$router.replace('menu')
+          this.getFacultativosForEmail(this.email)
         },
         (err) => {
           alert('Ups! ' + err.message)
         }
       )
+    },
+    getFacultativosForEmail(e) {
+      fetch("/api/facultativos/email/" + e)
+        .then(res => res.json())
+        .then(data => {
+          window.$cookies.set('facultativo', data.pApellido + " "
+          + data.pApellido + ", "
+          + data.nombre + " ("
+          + data.nif + ")")
+        });
     }
   }
 }

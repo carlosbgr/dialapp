@@ -4,7 +4,9 @@ const mongoose = require('mongoose')
 
 const app = express()
 
-mongoose.connect('mongodb://localhost/dialapp-database', { useNewUrlParser: true })
+mongoose.connect('mongodb://localhost/dialapp-database', { 
+    useNewUrlParser: true,
+    useCreateIndex: true  })
     .then(db => console.log('DB is connected'))
     .catch(err => console.error)
 
@@ -17,6 +19,7 @@ app.use(express.json())
 
 // Routes
 app.use('/api/pacientes', require('../src/routes/pacientes'))
+app.use('/api/facultativos', require('../src/routes/facultativos'))
 
 // static files
 app.use(express.static(__dirname + '/public'))
