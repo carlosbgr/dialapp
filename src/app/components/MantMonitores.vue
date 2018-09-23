@@ -112,6 +112,7 @@ export default {
         .then(res => res.json())
         .then(data => {
           this.monitores = data
+          console.log(data)
         });
     },
     getTipoMonitores() {
@@ -173,7 +174,7 @@ export default {
             if(data.activo === false){
               toastr.success('Monitor Activado')
             } else {
-              toastr.warning('Facultativo Desactivado')
+              toastr.warning('Monitor Desactivado')
             }
             this.getMonitores()
           })
