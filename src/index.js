@@ -20,6 +20,8 @@ app.use(express.json())
 // Routes
 app.use('/api/pacientes', require('../src/routes/pacientes'))
 app.use('/api/facultativos', require('../src/routes/facultativos'))
+app.use('/api/monitores', require('../src/routes/monitores'))
+app.use('/api/tipoMonitores', require('../src/routes/tipoMonitores'))
 
 // static files
 app.use(express.static(__dirname + '/public'))

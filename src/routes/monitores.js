@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-const Monitor = require('../models/tipoMonitor')
+const Monitor = require('../models/monitor')
 
 // Devuelve todos los items
 router.get('/', async(req, res) => {
@@ -19,7 +19,6 @@ router.get('/:id', async(req, res) => {
 router.post('/', async (req, res) => {
   const monitor = new Monitor(req.body)
   await monitor.save()
-  console.log(monitor)
   res.json({
     status: 'Monitor Guardado'
   })

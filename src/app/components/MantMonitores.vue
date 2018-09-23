@@ -16,7 +16,11 @@
                 <input type="text" class="form-control form-control-sm" v-model="monitor.estado" placeholder="Estado">
               </div>
               <div class="form-group">
-                <input type="text" class="form-control form-control-sm" v-model="monitor.TipoMonitor" placeholder="TipoMonitor">
+                <select class="form-control">
+                  <div v-for="(tm, index) in tipoMonitores" :key="index">
+                    <option>{{ tm.tipo }}</option>
+                  </div>
+                </select>
               </div>
               <template v-if="edit === false">
                 <button class="btn btn-block btn-primary">Añadir</button>
@@ -46,20 +50,8 @@
             <tbody>
                 <tr v-for="(m, index) in paginador(monitores)" :key="index">
                     <td>{{ m.numeroSerie }}</td>
+                    <td>{{ m.TipoMonitor }}</td>
                     <td>{{ m.estado }}</td>
-                    <td>{{ m.TipoMonitor.tipo }}</td>
-
-                    <td>
-                      <div class="btn-group">
-                        <template v-if="f.activo === true">
-                          <button @click="changeEstadoMonitor(f._id)" class="btn btn-danger">D</button>
-                        </template>
-                        <template v-else>
-                          <button @click="changeEstadoMonitor(f._id)" class="btn btn-success">A</button>
-                        </template>
-                        <button @click="editMonitor(f._id)" class="btn btn-secondary">E</button>
-                      </div>
-                    </td>
                 </tr>
             </tbody>
           </table>
@@ -87,6 +79,12 @@ class Monitor {
   }
 }
 
+class TipoMonitor {
+  constructor(tipo) {
+    this.tipo = tipo
+  }
+}
+
 export default {
   components: {
     bPagination
@@ -95,6 +93,8 @@ export default {
     return {
       monitor: new Monitor(),
       monitores: [],
+      tipoMonitor: new TipoMonitor(),
+      tipoMonitores: [],
       datatemp: [],
       edit: false,
       monitorToEdit: '',
@@ -104,6 +104,7 @@ export default {
   },
   created() {
     this.getMonitores()
+    this.getTipoMonitores()
   },
   methods: {
     getMonitores() {
@@ -111,6 +112,14 @@ export default {
         .then(res => res.json())
         .then(data => {
           this.monitores = data
+        });
+    },
+    getTipoMonitores() {
+      fetch("/api/tipoMonitores")
+        .then(res => res.json())
+        .then(data => {
+          this.tipoMonitores = data
+          console.log(data)
         });
     },
     sendMonitor(){
