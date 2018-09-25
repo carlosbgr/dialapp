@@ -22,6 +22,9 @@ app.use('/api/pacientes', require('../src/routes/pacientes'))
 app.use('/api/facultativos', require('../src/routes/facultativos'))
 app.use('/api/monitores', require('../src/routes/monitores'))
 app.use('/api/tipoMonitores', require('../src/routes/tipoMonitores'))
+app.use('/api/dializadores', require('../src/routes/dializadores'))
+app.use('/api/accesosvasculares', require('../src/routes/accesosvasculares'))
+app.use('/api/sesiones', require('../src/routes/sesiones'))
 
 // static files
 app.use(express.static(__dirname + '/public'))

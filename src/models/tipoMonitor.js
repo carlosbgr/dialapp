@@ -3,7 +3,7 @@ const { Schema } = mongoose;
 
 const TipoMonitor = new Schema(
   {
-    tipo: { type: String, unique: true }
+    tipo: { type: String, unique: true, uppercase: true }
   },
   { versionKey: false }
 )

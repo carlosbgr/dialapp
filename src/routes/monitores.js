@@ -32,11 +32,19 @@ router.put('/:id', async(req, res) => {
   })
 })
 
-// Actualiza el campo activo correspondiente al id
+// Actualiza el campo estado correspondiente al id
 router.put('/:id/:estado', async(req, res) => {
-  await Monitor.findByIdAndUpdate(req.params.id, { $set: { estado: !req.body.estado} }, req.body)
+  var estado;
+  if(req.body.estado === 'A'){
+    estado = "D"
+  } else {
+    if(req.body.estado === 'D'){
+      estado = "A"
+    }
+  }
+  await Monitor.findByIdAndUpdate(req.params.id, { $set: { estado: estado} }, req.body)
   res.json({
-      status: 'Monitor Modificado'
+      status: 'Estado de Monitor Modificado'
   })
 })
 

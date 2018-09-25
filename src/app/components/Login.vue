@@ -7,9 +7,9 @@
       <div class="col-sm-4">
       </div>
       <div class="col-sm-4">
-        <div class="card">
-          <div class="card-header">
-            <h3>Login</h3>
+        <div class="card border border-primary shadow rounded">
+          <div class="card-header bg-primary">
+            <h3 style="color:white">Inicio de Sesion</h3>
           </div>
           <div class="card-body">
             <form @submit.prevent="signIn">
@@ -20,8 +20,8 @@
                 <input type="password" class="form-control" v-model="password" placeholder="Contraseña">
               </div>
               <button type="submit" class="btn btn-primary btn-block">Login</button>
-              <router-link to="/sign-up">Crear Usuario</router-link>
             </form>
+            <!--<button class="btn btn-link" @click="resetPassword">Retear Contraseña</button>-->
           </div>
         </div>
       </div>
@@ -55,6 +55,9 @@ export default {
           alert('Ups! ' + err.message)
         }
       )
+    },
+    resetPassword(){
+      Firebase.auth()
     },
     getFacultativosForEmail(e) {
       fetch("/api/facultativos/email/" + e)

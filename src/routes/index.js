@@ -9,6 +9,9 @@ import Menu from '../app/components/Menu.vue'
 import MantPacientes from '../app/components/MantPacientes.vue'
 import MantFacultativos from '../app/components/MantFacultativos.vue'
 import MantMonitores from '../app/components/MantMonitores.vue'
+import MantDializadores from '../app/components/MantDializadores.vue'
+import MantAccesosVasculares from '../app/components/MantAccesosVasculares.vue'
+import Sesiones from '../app/components/Sesiones.vue'
 
 // Import Firebase
 import Firebase from 'firebase'
@@ -29,7 +32,10 @@ let router = new Router({
     { path: '/menu', name: 'Menu', component: Menu, meta: { requiresAuth: true }},
     { path: '/mantenimiento/pacientes', name: 'MantPacientes', component: MantPacientes, meta: { requiresAuth: true }},
     { path: '/mantenimiento/facultativos', name: 'MantFacultativos', component: MantFacultativos, meta: { requiresAuth: true }},
-    { path: '/mantenimiento/monitores', name: 'MantMonitores', component: MantMonitores, meta: { requiresAuth: true }}
+    { path: '/mantenimiento/monitores', name: 'MantMonitores', component: MantMonitores, meta: { requiresAuth: true }},
+    { path: '/mantenimiento/dializadores', name: 'MantDializadores', component: MantDializadores, meta: { requiresAuth: true }},
+    { path: '/mantenimiento/accesosvasculares', name: 'MantAccesosVasculares', component: MantAccesosVasculares, meta: { requiresAuth: true }},
+    { path: '/registrosesion', name: 'Sesiones', component: Sesiones, meta: { requiresAuth: true }}
   ]
 })
 

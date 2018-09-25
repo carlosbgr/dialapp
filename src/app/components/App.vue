@@ -9,7 +9,7 @@
             <template v-if="btnCerrar === true">
               <div id="btnlogout" class="row mb-8">
                 <!--<button disabled="disabled" class="btn btn-primary">{{  this.facultativo  }}</button>-->
-                <button @click="logout" class="btn btn-danger"> Cerrar Sesion </button>
+                <button @click="logout" class="btn btn-danger shadow"> Cerrar Sesion </button>
               </div>
             </template>
           </nav>

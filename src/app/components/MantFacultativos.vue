@@ -2,8 +2,8 @@
   <div class="container">
     <div class="row pt-5">
       <div class="col-md-3">
-        <button class="form-group btn btn-primary btn-block" @click="volver">Volver al Menu</button>
-        <div class="card">
+        <button class="form-group btn btn-primary btn-block shadow" @click="volver">Volver al Menu</button>
+        <div class="card shadow">
           <div class="card-header">
             <h3>Añadir Facultativo</h3>
           </div>
@@ -29,26 +29,26 @@
               </div>
               <div class="form-group">
                 <div class="custom-control custom-radio custom-control-inline">
-                  <input type="radio" class="custom-control-input" v-model="facultativo.sexo" id="sexoH" value="H" name="groupSexoRadio">
+                  <input type="radio" class="custom-control-input" id="sexoH" value="H" name="groupSexoRadio">
                   <label class="custom-control-label" for="sexoH">Hombre</label>
                 </div>
                 <div class="custom-control custom-radio custom-control-inline">
-                  <input type="radio" class="custom-control-input" v-model="facultativo.sexo" id="sexoM" value="M" name="groupSexoRadio">
+                  <input type="radio" class="custom-control-input" id="sexoM" value="M" name="groupSexoRadio">
                   <label class="custom-control-label" for="sexoM">Mujer</label>
                 </div>
               </div>
               <template v-if="edit === false">
-                <button class="btn btn-block btn-primary">Añadir</button>
+                <button class="btn btn-block btn-primary shadow">Añadir</button>
               </template>
               <template v-else>
-                <button class="btn btn-block btn-primary">Modificar</button>
+                <button class="btn btn-block btn-primary shadow">Modificar</button>
               </template>
             </form>
           </div>
         </div>
       </div>
       <div class="col-md-9">
-        <div class="card">
+        <div class="card shadow">
           <div class="card-header">
             <h3>Facultativos</h3>
           </div>
@@ -142,6 +142,7 @@ export default {
         });
     },
     sendFacultativo(){
+      this.facultativo.sexo = this.getSexo()
       if(this.edit === false) {
           Firebase.auth().createUserWithEmailAndPassword(this.facultativo.email, this.facultativo.nif).then(
         (user) => {
@@ -179,6 +180,7 @@ export default {
           })
       }
       this.facultativo = new Facultativo()
+      this.clearSexo()
     },
     unsubscribeFacultativo(id) {
       fetch("/api/facultativos/" + id)
@@ -217,7 +219,34 @@ export default {
             data.sApellido),
           this.facultativoToEdit = data._id,
           this.edit = true
+
+          this.setSexo(data.sexo)
         })
+    },
+    getSexo(){
+      var sexo;
+      if(document.getElementById("sexoH").checked === true){
+        sexo = "H"
+      } else {
+        if(document.getElementById("sexoM").checked === true){
+          sexo = "M"
+        }
+      }
+
+      return sexo
+    },
+    setSexo(sexo){
+      if(sexo === "H"){
+            document.getElementById("sexoH").checked = true
+            document.getElementById("sexoM").checked = false
+          } else {
+            document.getElementById("sexoM").checked = true
+            document.getElementById("sexoH").checked = false
+          }
+    },
+    clearSexo(){
+      document.getElementById("sexoM").checked = false
+      document.getElementById("sexoH").checked = false
     },
     paginador(p) {
       const indiceInicio = (this.paginaActual - 1) * this.itemsPagina

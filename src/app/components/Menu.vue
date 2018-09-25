@@ -2,7 +2,7 @@
     <div class="container">
         <div class="row pt-5">
             <div class="col-md-9">
-                <div class="card">
+                <div class="card shadow">
                 <div class="card-header">
                     <h3>Pacientes</h3>
                 </div>
@@ -27,7 +27,7 @@
 
                             <td align="center">
                             <div class="btn-group">
-                                <button class="btn btn-sm btn-info">P</button>
+                                <button class="btn btn-sm btn-info" @click="btnRedirect('registrosesion')">PAUTAR</button>
                             </div>
                             </td>
                         </tr>
@@ -37,7 +37,7 @@
                 </div>
             </div>
             <div class="col-md-3">
-                <div class="card">
+                <div class="card shadow rounded">
                     <div class="card-header">
                         <h3>Mantenimiento</h3>
                     </div>
@@ -45,7 +45,8 @@
                         <div class="btn-block">
                             <button class="btn btn-light btn-block" @click="btnRedirect('mantenimiento/pacientes')">Pacientes</button>
                             <button class="btn btn-light btn-block" @click="btnRedirect('mantenimiento/monitores')">Monitores</button>
-                            <button class="btn btn-light btn-block" @click="btnRedirect('dializadores')">Dializadores</button>
+                            <button class="btn btn-light btn-block" @click="btnRedirect('mantenimiento/accesosvasculares')">Accesos Vasculares</button>
+                            <button class="btn btn-light btn-block" @click="btnRedirect('mantenimiento/dializadores')">Dializadores</button>
                             <button class="btn btn-light btn-block" @click="btnRedirect('mantenimiento/facultativos')">Facultativos</button>
                         </div>
                     </div>
