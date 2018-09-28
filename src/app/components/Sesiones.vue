@@ -266,7 +266,9 @@ class Sesion {
     this.monitor = monitor;
     this.numeroSerieMonitor = numeroSerieMonitor;
     this.horasSesion;
-    this.dializador, this.accesoVascular, this.tipobano;
+    this.dializador, 
+    this.accesoVascular, 
+    this.tipobano;
     this.basebano;
     this.bano;
     this.pesoseco;
@@ -276,8 +278,6 @@ class Sesion {
     this.obsfacultativo;
   }
 }
-
-//import Paciente from '../clases/paciente'
 
 class Paciente {
   constructor(
