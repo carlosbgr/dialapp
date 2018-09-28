@@ -46,7 +46,7 @@
             <tbody>
                 <tr v-for="(m, index) in paginador(monitores)" :key="index">
                     <td>{{ m.numeroSerie }}</td>
-                    <td>{{ m.tipoMonitor }}</td>
+                    <td>{{ m.tipomonitor }}</td>
                       <td align="center">
                         <div class="btn-group">
                           <template v-if="m.estado === 'A'">

@@ -63,10 +63,7 @@ export default {
       fetch("/api/facultativos/email/" + e)
         .then(res => res.json())
         .then(data => {
-          window.$cookies.set('facultativo', data.pApellido + " "
-          + data.pApellido + ", "
-          + data.nombre + " ("
-          + data.nif + ")")
+          window.$cookies.set('facultativo', data.nif)
         });
     }
   }

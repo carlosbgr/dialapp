@@ -41,6 +41,7 @@ export default {
         .then(() => {
           this.$router.replace('login')
           window.$cookies.remove('facultativo')
+          window.$cookies.remove('paciente')
           this.btnCerrar = true
           this.btnVolver = true
         })

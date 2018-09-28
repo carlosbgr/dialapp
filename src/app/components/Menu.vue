@@ -27,7 +27,7 @@
 
                             <td align="center">
                             <div class="btn-group">
-                                <button class="btn btn-sm btn-info" @click="btnRedirect('registrosesion')">PAUTAR</button>
+                                <button class="btn btn-sm btn-info" @click="btnRedirect('registrosesion', p._id)">PAUTAR</button>
                             </div>
                             </td>
                         </tr>
@@ -115,8 +115,9 @@ export default {
       const indiceFinal = indiceInicio + this.paginaActual > p.length ? p.length : indiceInicio  + this.paginaActual
       return p.slice(indiceInicio , (indiceInicio + this.pacientesPagina) )
     },
-    btnRedirect(ruta){
+    btnRedirect(ruta,id){
       window.location.replace('#/'+ruta)
+      window.$cookies.set('paciente', id)
       //window.location.reload()
     }
   }

@@ -12,7 +12,7 @@ const Sesion = new Schema(
     dializador: { type: String, uppercase: true },
     accesoVascular: { type:String, uppercase: true },
     tipobano: { type:String, uppercase: true },
-    baseBano: { type:String, uppercase: true },
+    basebano: { type:String, uppercase: true },
     bano: { type:String, uppercase: true },
     pesoseco: Number,
     ufmax: Number,

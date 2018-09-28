@@ -9,6 +9,17 @@ router.get('/', async(req, res) => {
   res.json(monitores)
 })
 
+// Devuelve items filtrando por tipoMonitor
+router.get('/numserie/:tipo', async(req, res) => {
+  const numSerie = await Monitor.find( { tipomonitorOption: req.params.tipo }, {numeroSerie:1} )
+  res.json(numSerie)
+})
+
+router.get('/asignacionmonitor/:sip', async(req, res) => {
+  const monitor = await Monitor.find( { sip: req.params.sip }, {numeroSerie:1, tipomonitor:1, _id:0} )
+  res.json(monitor)
+})
+
 // Devuelve un item filtrando por id
 router.get('/:id', async(req, res) => {
   const monitor = await Monitor.findById(req.params.id, req.body)
@@ -31,6 +42,22 @@ router.put('/:id', async(req, res) => {
       status: 'Monitor Modificado'
   })
 })
+
+// Actualiza el campo activo correspondiente al id
+router.put('/updateAsignacionMonitorborrar/:sip', async(req, res) => {
+  await Monitor.findOneAndUpdate( {sip : req.params.sip},{ $unset : { sip : "" } })
+    res.json({
+        status: 'SIP Borrado en Actualizacion'
+    })
+  })
+
+  // Actualiza el campo activo correspondiente al id
+router.put('/updateAsignacionMonitorinsertar/:numeroSerie/:sip', async(req, res) => {
+  await Monitor.findOneAndUpdate( {numeroSerie : req.params.numeroSerie},{ $set : { sip : req.params.sip } })
+    res.json({
+        status: 'SIP Insertado en Actualizacion'
+    })
+  })
 
 // Actualiza el campo estado correspondiente al id
 router.put('/:id/:estado', async(req, res) => {

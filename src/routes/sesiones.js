@@ -15,6 +15,12 @@ router.get('/:id', async(req, res) => {
   res.json(sesion)
 })
 
+// Devuelve un item filtrando por sip
+router.get('/sip/:sip', async(req, res) => {
+  const sesiones = await Sesion.find({ sip: req.params.sip })
+  res.json(sesiones)
+})
+
 // Inserta un item
 router.post('/', async (req, res) => {
   const sesion = new Sesion(req.body)
@@ -32,11 +38,11 @@ router.put('/:id', async(req, res) => {
   })
 })
 
-// Actualiza el campo activo correspondiente al id
-router.put('/:id/:activo', async(req, res) => {
-  await Sesion.findByIdAndUpdate(req.params.id, { $set: { activo: !req.body.activo} }, req.body)
+// Borra item por id
+router.delete('/:id', async(req, res) => {
+  await Sesion.findByIdAndRemove(req.params.id, req.body)
   res.json({
-      status: 'Paciente Modificado'
+      status: 'Sesion Borrada'
   })
 })
 
