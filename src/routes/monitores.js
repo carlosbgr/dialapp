@@ -9,6 +9,12 @@ router.get('/', async(req, res) => {
   res.json(monitores)
 })
 
+router.get('/sip/:sip', async(req, res) => {
+  const monitores = await Monitor.find( {sip : req.params.sip}, {numeroSerie:1, tipomonitor:1, _id:0} )
+  res.json(monitores)
+})
+
+
 // Devuelve items filtrando por tipoMonitor
 router.get('/numserie/:tipo', async(req, res) => {
   const numSerie = await Monitor.find( { tipomonitorOption: req.params.tipo }, {numeroSerie:1} )

@@ -54,13 +54,13 @@
               <form>
                 <div class="form-row">
                   <div class="col">
-                    <select class="form-control form-control-sm" id="tipoMonitor" @change="enableNumSerie">
+                    <select class="form-control form-control-sm" id="optionTipoMonitor" @change="enableNumSerie">
                       <option value="" disabled selected id="defaultTipoMonitor">Tipo de Monitor</option>
                       <option v-for="(tm, index) in tipoMonitores" :key="index" v-bind:value="tm.tipo" v-bind:id="tm.tipo">  {{ tm.tipo }} </option>
                     </select>
                   </div>
                   <div class="col">
-                    <select id="numeroSerie" class="form-control form-control-sm" :disabled="enabledNumSerie === false">
+                    <select id="optionNumeroSerie" class="form-control form-control-sm" :disabled="enabledNumSerie === false">
                       <option value="" disabled selected id="defaultNumSerie">Num Serie</option>
                       <option v-for="(m, index) in monitores" :key="index" v-bind:value="m.numeroSerie" v-bind:id="m.numeroSerie">  {{ m.numeroSerie }} </option>
                     </select>
@@ -73,7 +73,7 @@
             </div>
           </div>
         </div>
-        <div class="row-md-5">
+        <!--<div class="row-md-5">
           <div class="card shadow">
             <div class="card-header">
               <h3>Registro Sesiones</h3>
@@ -228,8 +228,7 @@
           </table>
          </div>
         </div>
-      </div>
-
+      </div>-->
       </div>
     </div>
   </div>
@@ -367,14 +366,40 @@ export default {
     };
   },
   created() {
-    this.getPaciente(window.$cookies.get("paciente"));
-    this.getTipoMonitores();
-    this.getNumSerie();
-    this.getDializadores();
-    this.getAccesos();
-    this.setAsignacionMonitor();
+    this.getPaciente(window.$cookies.get('paciente'));
+    this.getMonitor(window.$cookies.get('sip'))
+    this.getTiposMonitores(window.$cookies.get('optionTipoMonitor'));
+    this.getNumerosSerie(window.$cookies.get('optionTipoMonitor'), window.$cookies.get('optionNumeroSerie'))
+
+    //this.getDializadores();
+    //this.getAccesos();
+    //this.setAsignacionMonitor();
   },
   methods: {
+    getMonitor(sip){
+      fetch("/api/monitores/sip/" + sip)
+        .then(res => res.json())
+        .then(data => {
+          window.$cookies.set('optionTipoMonitor', data[0].tipomonitor)
+          window.$cookies.set('optionNumeroSerie', data[0].numeroSerie)
+        });
+    },
+    getTiposMonitores(otm) {
+      fetch("/api/tipoMonitores")
+        .then(res => res.json())
+        .then(data => {
+          this.tipoMonitores = data
+          document.getElementById('optionTipoMonitor').value = otm
+        });
+    },
+    getNumerosSerie(otm,ons) {
+      fetch("/api/monitores/numserie/" + otm)
+        .then(res => res.json())
+        .then(data => {
+          this.monitores = data;
+          document.getElementById('optionNumeroSerie').value = ons
+        });
+    },
     setSesion() {
       this.sesion.sip = this.paciente.sip;
       this.sesion.facultativo = window.$cookies.get("facultativo");
@@ -478,20 +503,6 @@ export default {
       )
         .then(res => res.json())
         .then(data => {});
-    },
-    getTipoMonitores() {
-      fetch("/api/tipoMonitores")
-        .then(res => res.json())
-        .then(data => {
-          this.tipoMonitores = data;
-        });
-    },
-    getNumSerie() {
-      fetch("/api/monitores/numserie/" + this.optionTipoMonitor)
-        .then(res => res.json())
-        .then(data => {
-          this.monitores = data;
-        });
     },
     getDializadores() {
       fetch("/api/dializadores")
