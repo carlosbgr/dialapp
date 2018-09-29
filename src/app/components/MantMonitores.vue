@@ -46,7 +46,7 @@
             <tbody>
                 <tr v-for="(m, index) in paginador(monitores)" :key="index">
                     <td>{{ m.numeroSerie }}</td>
-                    <td>{{ m.tipomonitor }}</td>
+                    <td>{{ m.tipo }}</td>
                       <td align="center">
                         <div class="btn-group">
                           <template v-if="m.estado === 'A'">
@@ -200,11 +200,11 @@ export default {
       fetch("/api/monitores/" + id)
         .then(res => res.json())
         .then(data => {
-          document.getElementById(data.tipoMonitor).selected = true
+          document.getElementById(data.tipo).selected = true
           this.monitor = new Monitor(
             data.numeroSerie,
             data.estado,
-            data.tipoMonitor),
+            data.tipo),
             this.monitorToEdit = data._id,
             this.edit = true
         })

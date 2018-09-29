@@ -12,6 +12,7 @@ import MantMonitores from '../app/components/MantMonitores.vue'
 import MantDializadores from '../app/components/MantDializadores.vue'
 import MantAccesosVasculares from '../app/components/MantAccesosVasculares.vue'
 import Sesiones from '../app/components/Sesiones.vue'
+import Seguimiento from '../app/components/Seguimiento.vue'
 
 // Import Firebase
 import Firebase from 'firebase'
@@ -35,7 +36,8 @@ let router = new Router({
     { path: '/mantenimiento/monitores', name: 'MantMonitores', component: MantMonitores, meta: { requiresAuth: true }},
     { path: '/mantenimiento/dializadores', name: 'MantDializadores', component: MantDializadores, meta: { requiresAuth: true }},
     { path: '/mantenimiento/accesosvasculares', name: 'MantAccesosVasculares', component: MantAccesosVasculares, meta: { requiresAuth: true }},
-    { path: '/registrosesion', name: 'Sesiones', component: Sesiones, meta: { requiresAuth: true }}
+    { path: '/registrosesion', name: 'Sesiones', component: Sesiones, meta: { requiresAuth: true }},
+    { path: '/seguimiento', name: 'Seguimiento', component: Seguimiento, meta: { requiresAuth: true }}
   ]
 })
 

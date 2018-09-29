@@ -5,7 +5,7 @@ const Facultativo = require('../models/facultativo')
 
 // Devuelve todos los items
 router.get('/', async(req, res) => {
-  const facultativos = await Facultativo.find()
+  const facultativos = await Facultativo.find().sort( { activo : -1, nif : 1} )
   res.json(facultativos)
 })
 

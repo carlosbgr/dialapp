@@ -5,19 +5,18 @@ const Monitor = require('../models/monitor')
 
 // Devuelve todos los items
 router.get('/', async(req, res) => {
-  const monitores = await Monitor.find()
+  const monitores = await Monitor.find().sort( { estado : -1, tipo : 1, numeroSerie : 1 } )
   res.json(monitores)
 })
 
 router.get('/sip/:sip', async(req, res) => {
-  const monitores = await Monitor.find( {sip : req.params.sip}, {numeroSerie:1, tipomonitor:1, _id:0} )
-  res.json(monitores)
+  const monitor = await Monitor.find( { sip: req.params.sip }, {numeroSerie:1, tipo:1, _id:0} )
+  res.json(monitor)
 })
-
 
 // Devuelve items filtrando por tipoMonitor
 router.get('/numserie/:tipo', async(req, res) => {
-  const numSerie = await Monitor.find( { tipomonitorOption: req.params.tipo }, {numeroSerie:1} )
+  const numSerie = await Monitor.find( { tipo: req.params.tipo }, {numeroSerie:1} )
   res.json(numSerie)
 })
 
@@ -50,16 +49,16 @@ router.put('/:id', async(req, res) => {
 })
 
 // Actualiza el campo activo correspondiente al id
-router.put('/updateAsignacionMonitorborrar/:sip', async(req, res) => {
-  await Monitor.findOneAndUpdate( {sip : req.params.sip},{ $unset : { sip : "" } })
+router.put('/updateMonitorborrar/:sip', async(req, res) => {
+  await Monitor.findOneAndUpdate( {sip : req.params.sip},{ $unset : { sip : "" }, $set : { estado : "A" } })
     res.json({
         status: 'SIP Borrado en Actualizacion'
     })
   })
 
   // Actualiza el campo activo correspondiente al id
-router.put('/updateAsignacionMonitorinsertar/:numeroSerie/:sip', async(req, res) => {
-  await Monitor.findOneAndUpdate( {numeroSerie : req.params.numeroSerie},{ $set : { sip : req.params.sip } })
+router.put('/updateMonitorinsertar/:numeroSerie/:sip', async(req, res) => {
+  await Monitor.findOneAndUpdate( {numeroSerie : req.params.numeroSerie},{ $set : { sip : req.params.sip, estado: "U" } })
     res.json({
         status: 'SIP Insertado en Actualizacion'
     })

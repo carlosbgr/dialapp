@@ -5,7 +5,7 @@ const Dializador = require('../models/dializador')
 
 // Devuelve todos los items
 router.get('/', async(req, res) => {
-  const dializadores = await Dializador.find()
+  const dializadores = await Dializador.find().sort( { estado: 1, nombre : 1 } )
   res.json(dializadores)
 })
 

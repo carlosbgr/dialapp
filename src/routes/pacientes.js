@@ -5,7 +5,7 @@ const Paciente = require('../models/Paciente')
 
 // Devuelve todos los items
 router.get('/', async(req, res) => {
-  const pacientes = await Paciente.find()
+  const pacientes = await Paciente.find().sort( { activo : -1, sip: 1 } )
   res.json(pacientes)
 })
 

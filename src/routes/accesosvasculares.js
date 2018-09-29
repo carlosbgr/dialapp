@@ -5,7 +5,7 @@ const AccesoVascular = require('../models/accesovascular')
 
 // Devuelve todos los items
 router.get('/', async(req, res) => {
-  const accesosvasculares = await AccesoVascular.find()
+  const accesosvasculares = await AccesoVascular.find().sort( { estado: 1, nombre : 1} )
   res.json(accesosvasculares)
 })
 

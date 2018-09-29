@@ -54,26 +54,29 @@
               <form>
                 <div class="form-row">
                   <div class="col">
-                    <select class="form-control form-control-sm" id="optionTipoMonitor" @change="enableNumSerie">
+                    <select class="form-control form-control-sm" id="optionTipoMonitor" @change="getNumerosSerie()" disabled>
                       <option value="" disabled selected id="defaultTipoMonitor">Tipo de Monitor</option>
                       <option v-for="(tm, index) in tipoMonitores" :key="index" v-bind:value="tm.tipo" v-bind:id="tm.tipo">  {{ tm.tipo }} </option>
                     </select>
                   </div>
                   <div class="col">
-                    <select id="optionNumeroSerie" class="form-control form-control-sm" :disabled="enabledNumSerie === false">
+                    <select id="optionNumeroSerie" class="form-control form-control-sm" disabled>
                       <option value="" disabled selected id="defaultNumSerie">Num Serie</option>
                       <option v-for="(m, index) in monitores" :key="index" v-bind:value="m.numeroSerie" v-bind:id="m.numeroSerie">  {{ m.numeroSerie }} </option>
                     </select>
                   </div>
                   <div class="col">
-                    <button class="btn btn-block btn-primary btn-sm shadow" @click="updateAsignacionMonitor()">Guardar</button>
+                    <div class="btn-group">
+                      <button id="btnModMonitor" class="btn btn-warning btn-sm shadow" @click="getTiposMonitores()">Modificar</button>
+                      <button id="btnSaveMonitor" class="btn btn-success btn-sm shadow" @click="updateMonitor()" disabled>Guardar</button>
+                  </div>
                   </div>
                 </div>
               </form>
             </div>
           </div>
         </div>
-        <!--<div class="row-md-5">
+        <div class="row-md-5">
           <div class="card shadow">
             <div class="card-header">
               <h3>Registro Sesiones</h3>
@@ -228,7 +231,7 @@
           </table>
          </div>
         </div>
-      </div>-->
+      </div>
       </div>
     </div>
   </div>
@@ -265,9 +268,7 @@ class Sesion {
     this.monitor = monitor;
     this.numeroSerieMonitor = numeroSerieMonitor;
     this.horasSesion;
-    this.dializador, 
-    this.accesoVascular, 
-    this.tipobano;
+    this.dializador, this.accesoVascular, this.tipobano;
     this.basebano;
     this.bano;
     this.pesoseco;
@@ -308,34 +309,6 @@ class Paciente {
   }
 }
 
-class Monitor {
-  constructor(numeroSerie, estado, tipoMonitor) {
-    this.numeroSerie = numeroSerie;
-    this.estado = estado;
-    this.tipoMonitor = tipoMonitor;
-  }
-}
-
-class TipoMonitor {
-  constructor(tipo) {
-    this.tipo = tipo;
-  }
-}
-
-class Dializador {
-  constructor(nombre, estado) {
-    this.nombre = nombre;
-    this.estado = estado;
-  }
-}
-
-class Acceso {
-  constructor(nombre, estado) {
-    this.nombre = nombre;
-    this.estado = estado;
-  }
-}
-
 export default {
   components: {
     bPagination
@@ -345,68 +318,94 @@ export default {
       sesion: new Sesion(),
       sesiones: [],
       paciente: new Paciente(),
-      pacientes: [],
-      sip: "",
-      monitor: new Monitor(),
       monitores: [],
-      tipoMonitor: new TipoMonitor(),
       tipoMonitores: [],
-      dializador: new Dializador(),
       dializadores: [],
-      acceso: new Acceso(),
       accesos: [],
-      datatemp: [],
-      optionTipoMonitor: "",
-      optionNumeroSerie: "",
-      edit: false,
-      pacienteToEdit: "",
       paginaActual: 1,
-      itemsPagina: 8,
-      enabledNumSerie: false
+      itemsPagina: 30,
     };
   },
   created() {
-    this.getPaciente(window.$cookies.get('paciente'));
-    this.getMonitor(window.$cookies.get('sip'))
-    this.getTiposMonitores(window.$cookies.get('optionTipoMonitor'));
-    this.getNumerosSerie(window.$cookies.get('optionTipoMonitor'), window.$cookies.get('optionNumeroSerie'))
+    this.getPaciente(window.$cookies.get("paciente"));
+    this.getMonitor(window.$cookies.get("sip"));
 
-    //this.getDializadores();
-    //this.getAccesos();
-    //this.setAsignacionMonitor();
+    this.getDializadores();
+    this.getAccesos();
   },
   methods: {
-    getMonitor(sip){
+    getMonitor(sip) {
       fetch("/api/monitores/sip/" + sip)
         .then(res => res.json())
         .then(data => {
-          window.$cookies.set('optionTipoMonitor', data[0].tipomonitor)
-          window.$cookies.set('optionNumeroSerie', data[0].numeroSerie)
+          this.tipoMonitores = data;
+          this.monitores = data;
+          document.getElementById("optionTipoMonitor").value = 1;
+          document.getElementById("optionNumeroSerie").value = 1;
         });
     },
-    getTiposMonitores(otm) {
-      fetch("/api/tipoMonitores")
+    getTiposMonitores() {
+      fetch("/api/tipoMonitores/")
         .then(res => res.json())
         .then(data => {
-          this.tipoMonitores = data
-          document.getElementById('optionTipoMonitor').value = otm
+          this.tipoMonitores = data;
+          document.getElementById("optionTipoMonitor").disabled = false;
+          document.getElementById("optionTipoMonitor").value = "";
         });
     },
-    getNumerosSerie(otm,ons) {
-      fetch("/api/monitores/numserie/" + otm)
+    getNumerosSerie() {
+      fetch(
+        "/api/monitores/numserie/" +
+          document.getElementById("optionTipoMonitor").value
+      )
         .then(res => res.json())
         .then(data => {
           this.monitores = data;
-          document.getElementById('optionNumeroSerie').value = ons
+          document.getElementById("optionNumeroSerie").disabled = false;
+
+          document.getElementById("btnSaveMonitor").disabled = false;
+          document.getElementById("btnModMonitor").disabled = true;
+        });
+    },
+    updateMonitor() {
+      fetch("/api/monitores/updateMonitorborrar/" + this.paciente.sip, {
+        method: "PUT",
+        body: JSON.stringify(this.monitores),
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json"
+        }
+      })
+        .then(res => res.json())
+        .then(data => {
+          fetch(
+            "/api/monitores/updateMonitorinsertar/" +
+              document.getElementById("optionNumeroSerie").value +
+              "/" +
+              this.paciente.sip,
+            {
+              method: "PUT",
+              body: JSON.stringify(this.monitores),
+              headers: {
+                Accept: "application/json",
+                "Content-type": "application/json"
+              }
+            }
+          )
+            .then(res => res.json())
+            .then(data => {
+              this.getMonitor(this.paciente.sip);
+              document.getElementById("optionTipoMonitor").disabled = true;
+              document.getElementById("optionNumeroSerie").disabled = true;
+              document.getElementById("btnSaveMonitor").disabled = true;
+            });
         });
     },
     setSesion() {
       this.sesion.sip = this.paciente.sip;
       this.sesion.facultativo = window.$cookies.get("facultativo");
-      this.sesion.monitor = document.getElementById("tipoMonitor").value;
-      this.sesion.numeroSerieMonitor = document.getElementById(
-        "numeroSerie"
-      ).value;
+      this.sesion.monitor = document.getElementById("optionTipoMonitor").value;
+      this.sesion.numeroSerieMonitor = document.getElementById("optionNumeroSerie").value;
       this.sesion.dializador = document.getElementById("dializador").value;
       this.sesion.accesoVascular = document.getElementById("acceso").value;
       this.sesion.tipobano = document.getElementById("tipobano").value;
@@ -427,6 +426,7 @@ export default {
           }
         });
       }
+      this.getSesiones(this.paciente.sip)
     },
     getSesiones(sip) {
       fetch("/api/sesiones/sip/" + sip)
@@ -471,38 +471,8 @@ export default {
           );
 
           this.getSesiones(data.sip);
-          this.sip = data.sip;
           window.$cookies.set("sip", data.sip);
         });
-    },
-    setAsignacionMonitor() {
-      fetch("/api/monitores/asignacionmonitor/" + window.$cookies.get("sip"))
-        .then(res => res.json())
-        .then(data => {
-          document.getElementById("tipoMonitor").value = data[0].tipomonitor;
-          fetch("/api/monitores/numserie/" + data[0].tipomonitor)
-            .then(res => res.json())
-            .then(data => {
-              this.monitores = data;
-            });
-          console.log(data[0].numeroSerie)
-          document.getElementById("numeroSerie").value = data[0].numeroSerie
-          this.enabledNumSerie = true;
-        });
-    },
-    updateAsignacionMonitor() {
-      fetch("/api/monitores/updateAsignacionMonitorBorrar/" + this.paciente.sip)
-        .then(res => res.json())
-        .then(data => {});
-
-      fetch(
-        "/api/monitores/updateAsignacionMonitorInsertar/" +
-          document.getElementById("numeroSerie").value +
-          "/" +
-          this.paciente.sip
-      )
-        .then(res => res.json())
-        .then(data => {});
     },
     getDializadores() {
       fetch("/api/dializadores")
@@ -517,9 +487,6 @@ export default {
         .then(data => {
           this.accesos = data;
         });
-    },
-    enableNumSerie() {
-      this.enabledNumSerie = true;
     },
     paginador(p) {
       const indiceInicio = (this.paginaActual - 1) * this.itemsPagina;

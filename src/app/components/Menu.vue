@@ -27,7 +27,8 @@
 
                             <td align="center">
                             <div class="btn-group">
-                                <button class="btn btn-sm btn-info" @click="btnRedirect('registrosesion', p._id)">PAUTAR</button>
+                                <button class="btn btn-sm btn-info" @click="btnRedirect('registrosesion', p._id)">P</button>
+                                <button class="btn btn-sm btn-info" @click="btnRedirect('seguimiento', p._id)">S</button>
                             </div>
                             </td>
                         </tr>
@@ -45,7 +46,7 @@
                         <div class="btn-block">
                             <button class="btn btn-light btn-block" @click="btnRedirect('mantenimiento/pacientes')">Pacientes</button>
                             <button class="btn btn-light btn-block" @click="btnRedirect('mantenimiento/monitores')">Monitores</button>
-                            <button class="btn btn-light btn-block" @click="btnRedirect('mantenimiento/accesosvasculares')">Accesos Vasculares</button>
+                            <button class="btn btn-light btn-block" @click="btnRedirect('mantenimiento/accesosvasculares')">Accesos <br>Vasculares</button>
                             <button class="btn btn-light btn-block" @click="btnRedirect('mantenimiento/dializadores')">Dializadores</button>
                             <button class="btn btn-light btn-block" @click="btnRedirect('mantenimiento/facultativos')">Facultativos</button>
                         </div>
