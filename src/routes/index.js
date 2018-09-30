@@ -29,7 +29,7 @@ let router = new Router({
   routes: [
     { path: '*', redirect: '/login'},
     { path: '/', redirect: '/login'},
-    { path: '/login', name: 'Login', component: Login},
+    { path: '/login', name: 'Login', component: Login },
     { path: '/menu', name: 'Menu', component: Menu, meta: { requiresAuth: true }},
     { path: '/mantenimiento/pacientes', name: 'MantPacientes', component: MantPacientes, meta: { requiresAuth: true }},
     { path: '/mantenimiento/facultativos', name: 'MantFacultativos', component: MantFacultativos, meta: { requiresAuth: true }},
@@ -49,6 +49,10 @@ router.beforeEach((to, from, next) => {
   if (requiresAuth && !currentUser) next('login')
   else if (!requiresAuth && currentUser) next('menu')
   else next()
+
+  if(window.closed === true){
+    router.replace('login')
+  }
 })
 
 export default router

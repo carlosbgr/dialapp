@@ -33,6 +33,7 @@ export default {
   },
   created() {
     this.init()
+    //window.addEventListener('beforeunload', this.logout)
   },
   methods: {
     logout () {
@@ -42,6 +43,7 @@ export default {
           this.$router.replace('login')
           window.$cookies.remove('facultativo')
           window.$cookies.remove('paciente')
+          window.$cookies.remove('sip')
           this.btnCerrar = true
           this.btnVolver = true
         })

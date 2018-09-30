@@ -46,6 +46,45 @@
       </div>
       <div class="col-md-9">
         <div class="row-md-5">
+          <div class="card shadow">
+          <div class="card-header">
+            <h3>Sesiones</h3>
+          </div>
+          <div class="card-body">
+            <b-pagination align="center" :total-rows="this.sesiones.length" v-model="paginaActual" :per-page="itemsPagina"></b-pagination>
+          <table class="table table-bordered table-hover small">
+            <thead>
+                <tr>
+                    <th scope="col">F Registro</th>
+                    <th scope="col">Monitor</th>
+                    <th scope="col">Obs Facultativo</th>
+                    <th scope="col">Obs Paciente</th>
+                    <th scope="col">Estado + Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(s, index) in paginador(sesiones)" :key="index">
+                    <td>{{ s.fRegistro }}</td>
+                    <td>{{ s.monitor }} ({{ s.numeroSerieMonitor }})</td>
+                    <td>{{ s.obsfacultativo }}</td>
+                    <td>{{ s.obspaciente }}</td>
+                    <td>
+                      <template v-if="s.estado === 'R'">
+                        <button disabled class="btn btn-outline-success">Registrada</button>
+                      </template>
+                      <template v-if="s.estado === 'F'">
+                        <button disabled class="btn btn-outline-success">Finalizada</button>
+                      </template>
+                      <template v-if="s.estado === 'C'">
+                        <button disabled class="btn btn-outline-success">Confirmada</button>
+                      </template>
+                      <button class="btn btn-danger" @click="deleteSesion(s._id)">X</button>
+                    </td>
+                </tr>
+            </tbody>
+          </table>
+         </div>
+        </div>
         </div>
         <div class="row-md-5">
         </div>
@@ -146,11 +185,12 @@ export default {
     };
   },
   created() {
-    this.getPaciente(window.$cookies.get("paciente"));
-    this.getMonitor(window.$cookies.get("sip"));
+    this.getPaciente(window.$cookies.get("paciente"))
+    this.getMonitor(window.$cookies.get("sip"))
 
-    this.getDializadores();
-    this.getAccesos();
+    this.getDializadores()
+    this.getAccesos()
+    this.getSesiones()
   },
   methods: {
     getMonitor(sip) {
@@ -159,8 +199,8 @@ export default {
         .then(data => {
           this.tipoMonitores = data;
           this.monitores = data;
-          document.getElementById("optionTipoMonitor").value = 1;
-          document.getElementById("optionNumeroSerie").value = 1;
+          document.getElementById("optionTipoMonitor").value = 1
+          document.getElementById("optionNumeroSerie").value = 1
         });
     },
     getTiposMonitores() {
@@ -168,8 +208,8 @@ export default {
         .then(res => res.json())
         .then(data => {
           this.tipoMonitores = data;
-          document.getElementById("optionTipoMonitor").disabled = false;
-          document.getElementById("optionTipoMonitor").value = "";
+          document.getElementById("optionTipoMonitor").disabled = false
+          document.getElementById("optionTipoMonitor").value = ""
         });
     },
     getNumerosSerie() {
@@ -180,10 +220,10 @@ export default {
         .then(res => res.json())
         .then(data => {
           this.monitores = data;
-          document.getElementById("optionNumeroSerie").disabled = false;
+          document.getElementById("optionNumeroSerie").disabled = false
 
-          document.getElementById("btnSaveMonitor").disabled = false;
-          document.getElementById("btnModMonitor").disabled = true;
+          document.getElementById("btnSaveMonitor").disabled = false
+          document.getElementById("btnModMonitor").disabled = true
         });
     },
     updateMonitor() {
@@ -214,19 +254,19 @@ export default {
             .then(res => res.json())
             .then(data => {
               this.getMonitor(this.paciente.sip);
-              document.getElementById("optionTipoMonitor").disabled = true;
-              document.getElementById("optionNumeroSerie").disabled = true;
-              document.getElementById("btnSaveMonitor").disabled = true;
+              document.getElementById("optionTipoMonitor").disabled = true
+              document.getElementById("optionNumeroSerie").disabled = true
+              document.getElementById("btnSaveMonitor").disabled = true
             });
         });
     },
     setSesion() {
-      this.sesion.sip = this.paciente.sip;
-      this.sesion.facultativo = window.$cookies.get("facultativo");
-      this.sesion.monitor = document.getElementById("optionTipoMonitor").value;
-      this.sesion.numeroSerieMonitor = document.getElementById("optionNumeroSerie").value;
-      this.sesion.dializador = document.getElementById("dializador").value;
-      this.sesion.accesoVascular = document.getElementById("acceso").value;
+      this.sesion.sip = this.paciente.sip
+      this.sesion.facultativo = window.$cookies.get("facultativo")
+      this.sesion.monitor = document.getElementById("optionTipoMonitor").value
+      this.sesion.numeroSerieMonitor = document.getElementById("optionNumeroSerie").value
+      this.sesion.dializador = document.getElementById("dializador").value
+      this.sesion.accesoVascular = document.getElementById("acceso").value
       this.sesion.tipobano = document.getElementById("tipobano").value;
       this.sesion.basebano = document.getElementById("basebano").value;
       this.sesion.bano =
@@ -252,7 +292,7 @@ export default {
         .then(res => res.json())
         .then(data => {
           for (var i = 0; i < data.length; i++) {
-            data[i].fRegistro = moment(data[i].fRegistro).format("DD/MM/YYYY");
+            data[i].fRegistro = moment(data[i].fRegistro).format("DD/MM/YYYY")
           }
           this.sesiones = data;
         });
@@ -267,7 +307,7 @@ export default {
       })
         .then(res => res.json())
         .then(data => {
-          this.getPaciente(window.$cookies.get("paciente"));
+          this.getPaciente(window.$cookies.get("paciente"))
         });
     },
     getPaciente(id) {
@@ -308,16 +348,17 @@ export default {
         });
     },
     paginador(p) {
-      const indiceInicio = (this.paginaActual - 1) * this.itemsPagina;
+      const indiceInicio = (this.paginaActual - 1) * this.itemsPagina
       const indiceFinal =
         indiceInicio + this.paginaActual > p.length
           ? p.length
-          : indiceInicio + this.paginaActual;
-      return p.slice(indiceInicio, indiceInicio + this.itemsPagina);
+          : indiceInicio + this.paginaActual
+      return p.slice(indiceInicio, indiceInicio + this.itemsPagina)
     },
     volver() {
-      this.$router.replace("/menu");
-      window.$cookies.remove("paciente");
+      this.$router.replace("/menu")
+      window.$cookies.remove("paciente")
+      window.$cookies.remove("sip")
     }
   }
 };

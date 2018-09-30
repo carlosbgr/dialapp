@@ -327,8 +327,8 @@ export default {
     };
   },
   created() {
-    this.getPaciente(window.$cookies.get("paciente"));
-    this.getMonitor(window.$cookies.get("sip"));
+    this.getPaciente(window.$cookies.get("paciente"))
+    this.getMonitor(window.$cookies.get("sip"))
 
     this.getDializadores();
     this.getAccesos();
@@ -340,8 +340,8 @@ export default {
         .then(data => {
           this.tipoMonitores = data;
           this.monitores = data;
-          document.getElementById("optionTipoMonitor").value = 1;
-          document.getElementById("optionNumeroSerie").value = 1;
+          document.getElementById("optionTipoMonitor").value = 1
+          document.getElementById("optionNumeroSerie").value = 1
         });
     },
     getTiposMonitores() {
@@ -349,8 +349,8 @@ export default {
         .then(res => res.json())
         .then(data => {
           this.tipoMonitores = data;
-          document.getElementById("optionTipoMonitor").disabled = false;
-          document.getElementById("optionTipoMonitor").value = "";
+          document.getElementById("optionTipoMonitor").disabled = false
+          document.getElementById("optionTipoMonitor").value = ""
         });
     },
     getNumerosSerie() {
@@ -361,10 +361,10 @@ export default {
         .then(res => res.json())
         .then(data => {
           this.monitores = data;
-          document.getElementById("optionNumeroSerie").disabled = false;
+          document.getElementById("optionNumeroSerie").disabled = false
 
-          document.getElementById("btnSaveMonitor").disabled = false;
-          document.getElementById("btnModMonitor").disabled = true;
+          document.getElementById("btnSaveMonitor").disabled = false
+          document.getElementById("btnModMonitor").disabled = true
         });
     },
     updateMonitor() {
@@ -395,21 +395,21 @@ export default {
             .then(res => res.json())
             .then(data => {
               this.getMonitor(this.paciente.sip);
-              document.getElementById("optionTipoMonitor").disabled = true;
-              document.getElementById("optionNumeroSerie").disabled = true;
-              document.getElementById("btnSaveMonitor").disabled = true;
+              document.getElementById("optionTipoMonitor").disabled = true
+              document.getElementById("optionNumeroSerie").disabled = true
+              document.getElementById("btnSaveMonitor").disabled = true
             });
         });
     },
     setSesion() {
       this.sesion.sip = this.paciente.sip;
-      this.sesion.facultativo = window.$cookies.get("facultativo");
+      this.sesion.facultativo = window.$cookies.get("facultativo")
       this.sesion.monitor = document.getElementById("optionTipoMonitor").value;
-      this.sesion.numeroSerieMonitor = document.getElementById("optionNumeroSerie").value;
-      this.sesion.dializador = document.getElementById("dializador").value;
-      this.sesion.accesoVascular = document.getElementById("acceso").value;
+      this.sesion.numeroSerieMonitor = document.getElementById("optionNumeroSerie").value
+      this.sesion.dializador = document.getElementById("dializador").value
+      this.sesion.accesoVascular = document.getElementById("acceso").value
       this.sesion.tipobano = document.getElementById("tipobano").value;
-      this.sesion.basebano = document.getElementById("basebano").value;
+      this.sesion.basebano = document.getElementById("basebano").value
       this.sesion.bano =
         "Ca " +
         document.getElementById("ca").value +
@@ -433,7 +433,7 @@ export default {
         .then(res => res.json())
         .then(data => {
           for (var i = 0; i < data.length; i++) {
-            data[i].fRegistro = moment(data[i].fRegistro).format("DD/MM/YYYY");
+            data[i].fRegistro = moment(data[i].fRegistro).format("DD/MM/YYYY")
           }
           this.sesiones = data;
         });
@@ -448,7 +448,7 @@ export default {
       })
         .then(res => res.json())
         .then(data => {
-          this.getPaciente(window.$cookies.get("paciente"));
+          this.getPaciente(window.$cookies.get("paciente"))
         });
     },
     getPaciente(id) {
@@ -470,8 +470,8 @@ export default {
             data.sexo
           );
 
-          this.getSesiones(data.sip);
-          window.$cookies.set("sip", data.sip);
+          this.getSesiones(data.sip)
+          window.$cookies.set("sip", data.sip)
         });
     },
     getDializadores() {
@@ -489,16 +489,17 @@ export default {
         });
     },
     paginador(p) {
-      const indiceInicio = (this.paginaActual - 1) * this.itemsPagina;
+      const indiceInicio = (this.paginaActual - 1) * this.itemsPagina
       const indiceFinal =
         indiceInicio + this.paginaActual > p.length
           ? p.length
-          : indiceInicio + this.paginaActual;
-      return p.slice(indiceInicio, indiceInicio + this.itemsPagina);
+          : indiceInicio + this.paginaActual
+      return p.slice(indiceInicio, indiceInicio + this.itemsPagina)
     },
     volver() {
-      this.$router.replace("/menu");
-      window.$cookies.remove("paciente");
+      this.$router.replace("/menu")
+      window.$cookies.remove("paciente")
+      window.$cookies.remove("sip")
     }
   }
 };
