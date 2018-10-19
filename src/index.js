@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 
 const app = express()
 
-mongoose.connect('mongodb://localhost/dialapp-database', { 
+mongoose.connect('mongodb://10.192.138.97/dialapp-database', { 
     useNewUrlParser: true,
     useCreateIndex: true  })
     .then(db => console.log('DB is connected'))
